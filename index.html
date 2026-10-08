@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUSINESS FEST 2026-27 | Proposal</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+    <style>
+        /* ====== VIEWPORT BASE (MANDATORY) ====== */
+        html, body { height: 100%; overflow-x: hidden; margin: 0; padding: 0; }
+        html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+        .slide {
+            width: 100vw; height: 100vh; height: 100dvh;
+            overflow: hidden; scroll-snap-align: start;
+            display: flex; flex-direction: column; position: relative;
+        }
+
+        .slide-content {
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; max-height: 100%;
+            overflow: hidden; padding: var(--slide-padding);
+            position: relative;
+            z-index: 2;
+        }
+
+        :root {
+            --title-size: clamp(2.5rem, 6vw, 5rem);
+            --h2-size: clamp(1.75rem, 4vw, 3.5rem);
+            --h3-size: clamp(1.25rem, 2.5vw, 2rem);
+            --body-size: clamp(0.875rem, 1.5vw, 1.25rem);
+            --small-size: clamp(0.75rem, 1vw, 1rem);
+            --slide-padding: clamp(2rem, 6vw, 6rem);
+            --content-gap: clamp(1rem, 2.5vw, 2.5rem);
+            --element-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+
+            /* ====== THEME: CREATIVE VOLTAGE ====== */
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --ink: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #84cc16; /* neon lime */
+            --accent-alt: #7c3aed; /* electric violet */
+            --font-display: 'Clash Display', sans-serif;
+            --font-body: 'General Sans', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        h1, h2, h3 { font-family: var(--font-display); margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; }
+        h1 { font-size: var(--title-size); }
+        h2 { font-size: var(--h2-size); }
+        h3 { font-size: var(--h3-size); }
+        p, li { font-size: var(--body-size); line-height: 1.6; margin: 0; }
+        
+        .text-accent { color: var(--accent); }
+        .text-alt { color: var(--accent-alt); }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent) 0%, #a3e635 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Reveal animations */
+        [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+        [data-reveal].revealed { opacity: 1; transform: translateY(0); }
+
+        /* Progress bar */
+        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; background: var(--accent); transition: width 0.3s; z-index: 9999; }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(1rem, 2vw, 2rem); }
+        .card { 
+            background: var(--surface); 
+            border-radius: 16px; 
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            border-top: 4px solid var(--accent);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        .card.alt { border-top-color: var(--accent-alt); }
+
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--content-gap); align-items: center; }
+        
+        /* Decorative Geometry */
+        .deco-shape { position: absolute; z-index: 0; opacity: 0.5; }
+        .shape-1 { right: -5%; top: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--accent-alt) 0%, transparent 70%); filter: blur(80px); opacity: 0.15; }
+        .shape-2 { left: -10%; bottom: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); filter: blur(100px); opacity: 0.1; }
+        
+        /* Diagonal split background slide */
+        .slide-diagonal {
+            background: linear-gradient(105deg, var(--bg) 50%, var(--surface) 50.1%);
+        }
+
+        .stats-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--content-gap); }
+        .stat-item { flex: 1; min-width: 200px; border-left: 4px solid var(--accent-alt); padding-left: 1rem; }
+        .stat-value { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem); font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+        
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: var(--element-gap); position: relative; padding-left: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; background: var(--surface); border-radius: 2px; }
+        .timeline-item { position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0.5rem; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 4px solid var(--bg); box-sizing: border-box; }
+        .timeline-date { font-family: var(--font-display); color: var(--accent-alt); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+
+        @media (max-width: 900px) {
+            .split { grid-template-columns: 1fr; }
+            .slide-diagonal { background: linear-gradient(160deg, var(--bg) 60%, var(--surface) 60.1%); }
+        }
+        @media (max-height: 700px) { :root { --slide-padding: clamp(0.75rem, 3vw, 2rem); --content-gap: clamp(0.4rem, 1.5vw, 1rem); --title-size: clamp(1.25rem, 4.5vw, 2.5rem); } }
+        @media (max-height: 600px) { :root { --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem); --title-size: clamp(1.1rem, 4vw, 2rem); --body-size: clamp(0.7rem, 1.2vw, 0.95rem); } .nav-dots, .keyboard-hint, .deco-shape { display: none; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; } html { scroll-behavior: auto; } }
+    </style>
+</head>
+<body>
+
+    <!-- DECORATIVE BACKGROUNDS -->
+    <div class="deco-shape shape-1"></div>
+    <div class="deco-shape shape-2"></div>
+
+    <!-- SLIDE 1: Hero -->
+    <section class="slide">
+        <div class="slide-content" style="text-align: center; justify-content: center; align-items: center;">
+            <p data-reveal style="color: var(--accent); font-family: var(--font-display); letter-spacing: 0.1em; margin-bottom: 1rem; font-weight: 600;">INSTITUTE OF MANAGEMENT SCIENCES</p>
+            <h1 data-reveal class="gradient-text">BUSINESS FEST<br>2026-27</h1>
+            <p data-reveal style="color: var(--muted); margin-top: var(--content-gap); max-width: 600px; font-size: var(--h3-size);">
+                Integrating Technology, Business, and Innovation.
+            </p>
+            <div data-reveal style="margin-top: 2rem; border: 1px solid rgba(255,255,255,0.1); padding: 0.5rem 1.5rem; border-radius: 50px; display: inline-block;">
+                <span style="color: var(--muted); font-size: var(--small-size);">17TH DECEMBER 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: Theme -->
+    <section class="slide slide-diagonal">
+        <div class="slide-content" style="text-align: center; justify-content: center; align-items: center;">
+            <p data-reveal style="color: var(--accent); font-family: var(--font-display); letter-spacing: 0.1em; margin-bottom: 1rem; font-weight: 600;">CORE THEME</p>
+            <h2 data-reveal class="gradient-text" style="font-size: clamp(2rem, 5vw, 4.5rem);">Sustainability & Innovation</h2>
+            <p data-reveal style="color: var(--muted); margin-top: var(--content-gap); max-width: 800px; font-size: var(--h3-size);">
+                Empowering businesses to grow while minimizing environmental impact through smart, tech-driven solutions.
+            </p>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: My Vision & Idea -->
+    <section class="slide">
+        <div class="slide-content split">
+            <div>
+                <h2 data-reveal>My Vision</h2>
+                <p data-reveal style="margin-top: var(--content-gap); color: var(--muted);">
+                    I envision BFest as the ultimate bridge between academia and the corporate world, where students don't just pitch ideas but launch actual startups. A platform that normalizes sustainability as the foundation of modern business.
+                </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: var(--element-gap);">
+                <div class="card alt" data-reveal>
+                    <h3 style="color: var(--accent-alt); margin-bottom: 0.5rem;">Action-Oriented</h3>
+                    <p style="color: var(--muted);">Moving beyond theory to rapid prototyping and viable business models.</p>
+                </div>
+                <div class="card" data-reveal>
+                    <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Ecosystem Building</h3>
+                    <p style="color: var(--muted);">Creating long-term networks among students, mentors, and investors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: My Role & Contribution -->
+    <section class="slide slide-diagonal">
+        <div class="slide-content split">
+            <div>
+                <h2 data-reveal>My Proposed Role</h2>
+                <p data-reveal style="margin-top: var(--content-gap); color: var(--muted);">
+                    As an organizing committee lead, I plan to drive the strategic direction and execution of BFest, ensuring every team aligns with our core theme and goals.
+                </p>
+            </div>
+            <div class="grid">
+                <div class="card" data-reveal>
+                    <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Responsibilities</h3>
+                    <ul style="color: var(--muted); margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Coordinate across tech and business teams.</li>
+                        <li>Onboard high-value sponsors and mentors.</li>
+                        <li>Oversee marketing and brand positioning.</li>
+                    </ul>
+                </div>
+                <div class="card alt" data-reveal>
+                    <h3 style="color: var(--accent-alt); margin-bottom: 0.5rem;">My Contribution</h3>
+                    <ul style="color: var(--muted); margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Leveraging my network to bring in industry experts.</li>
+                        <li>Implementing streamlined event management workflows.</li>
+                        <li>Ensuring a flawless attendee and participant experience.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 5: Key Activities -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2 data-reveal style="text-align: center; margin-bottom: var(--content-gap);">Key Activities to Organize</h2>
+            <div class="grid">
+                <div class="card" data-reveal>
+                    <div style="font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 1rem;">01</div>
+                    <h3>Green Tech Hackathon</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem;">A 24-hour challenge to build tech solutions for local sustainability problems.</p>
+                </div>
+                <div class="card alt" data-reveal>
+                    <div style="font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: var(--accent-alt); line-height: 1; margin-bottom: 1rem;">02</div>
+                    <h3>Investor Speed Dating</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem;">Quick pitch sessions matching top student groups directly with seed investors.</p>
+                </div>
+                <div class="card" data-reveal>
+                    <div style="font-family: var(--font-display); font-size: 3rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 1rem;">03</div>
+                    <h3>Interactive Art & Tech Expo</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem;">Fusing creative arts with VR/AR to showcase modern business storytelling.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 6: Timeline -->
+    <section class="slide slide-diagonal">
+        <div class="slide-content split">
+            <div style="padding-right: 2rem;">
+                <h2 data-reveal>The Road to BFest</h2>
+                <p data-reveal style="margin-top: 1rem; color: var(--muted);">
+                    A structured journey from ideation to the final exhibition, supported by mentorship and community-building activities.
+                </p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item" data-reveal>
+                    <div class="timeline-date">24th Oct 2026</div>
+                    <h3>Orientation & Networking</h3>
+                    <p style="color: var(--muted);">Guidance from NIC & BIC representatives.</p>
+                </div>
+                <div class="timeline-item" data-reveal>
+                    <div class="timeline-date">17th Nov 2026</div>
+                    <h3>Idea Selection</h3>
+                    <p style="color: var(--muted);">Pitching tech-based and sustainable ideas to mentors.</p>
+                </div>
+                <div class="timeline-item" data-reveal>
+                    <div class="timeline-date">7-9th Dec 2026</div>
+                    <h3>Pre-Event Activities</h3>
+                    <p style="color: var(--muted);">Logo reveal, official music launch, and sports days.</p>
+                </div>
+                <div class="timeline-item" data-reveal>
+                    <div class="timeline-date">17th Dec 2026</div>
+                    <h3 class="text-accent">Main Exhibition</h3>
+                    <p style="color: var(--muted);">The flagship Business Stalls Exhibition.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 7: Judging -->
+    <section class="slide">
+        <div class="slide-content">
+            <h2 data-reveal style="margin-bottom: var(--content-gap);">Evaluation & Awards</h2>
+            <div class="stats-row">
+                <div class="stat-item" data-reveal>
+                    <div class="stat-value">NIC / BIC</div>
+                    <p>Expert evaluation, mentorship, and incubation opportunities.</p>
+                </div>
+                <div class="stat-item" data-reveal style="border-color: var(--accent);">
+                    <div class="stat-value">Alumni</div>
+                    <p>Practical industry insights from IMSciences Entrepreneur Alumni.</p>
+                </div>
+            </div>
+            <div data-reveal style="margin-top: var(--content-gap); background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; display: inline-block;">
+                <span style="color: var(--muted); font-weight: 500;">Core Judging Criteria:</span>
+                <span style="color: var(--ink); margin-left: 1rem; font-family: var(--font-display);">INNOVATION &bull; EFFECTIVE USE OF TECHNOLOGY &bull; SUSTAINABILITY</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 8: Budget & Sponsors -->
+    <section class="slide slide-diagonal">
+        <div class="slide-content split">
+            <div>
+                <h2 data-reveal>Financial Strategy</h2>
+                <div data-reveal style="margin-top: var(--content-gap); height: 35vh; position: relative;">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+                <p data-reveal style="color: var(--muted); margin-top: 1rem; text-align: center;">
+                    Total Required: <strong style="color: var(--accent); font-family: var(--font-display);">PKR 1.23M</strong>
+                </p>
+                <div data-reveal style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-left: 4px solid var(--accent); border-radius: 4px;">
+                    <p style="font-size: var(--small-size); color: var(--muted); margin-bottom: 0.5rem;"><strong>Overview:</strong></p>
+                    <p style="font-size: var(--small-size); color: var(--muted);">A major portion of the budget will be allocated toward venue setup, tech infrastructure, and marketing to ensure a premium experience. Operational costs are optimized through strategic vendor partnerships. Our goal is to cover 63% through external sponsorships, with IMSciences facilitating the remaining 37%.</p>
+                </div>
+            </div>
+            <div class="card" data-reveal>
+                <h3 style="margin-bottom: 1.5rem;">Proposed Sponsors</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Bank of Khyber</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Emaar Group</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Jazz</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Toyota</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Suzuki</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">AH Group</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">KPK Tourism Authority</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">PTCL</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Nayatel</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Zong 4G</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Careem</span>
+                    <span style="background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; color: var(--muted);">Foodpanda</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 9: Conclusion -->
+    <section class="slide">
+        <div class="slide-content" style="text-align: center; align-items: center;">
+            <h2 data-reveal class="gradient-text" style="font-size: clamp(2rem, 5vw, 4.5rem);">Let's Build the Future</h2>
+            <p data-reveal style="color: var(--muted); margin-top: var(--content-gap); max-width: 700px; font-size: var(--h3-size);">
+                By bringing together students, experts, and partner organizations, BFest 2026-27 will create a lasting impact on entrepreneurship across Khyber Pakhtunkhwa.
+            </p>
+            <div data-reveal style="margin-top: 3rem; background: var(--surface); border: 2px solid var(--accent); padding: 1.5rem 3rem; border-radius: 12px; display: inline-block; cursor: pointer; transition: transform 0.2s;">
+                <h3 style="color: var(--accent); margin: 0;">Requesting Approval</h3>
+                <p style="color: var(--muted); font-size: var(--small-size); margin-top: 0.25rem;">To officially launch the next era of Business Fest</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+        // Reveal observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transitionDelay = `${i * 50}ms`;
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+        // Navigation Controller
+        class SlideMaestro {
+            constructor() { 
+                this.slides = document.querySelectorAll('.slide'); 
+                this.current = 0; 
+                this.init(); 
+            }
+            init() {
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown' || e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        this.next();
+                    }
+                    if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.prev();
+                    }
+                    if (e.key === 'Home') this.goTo(0);
+                    if (e.key === 'End') this.goTo(this.slides.length - 1);
+                });
+                
+                let ty = 0;
+                document.addEventListener('touchstart', e => ty = e.touches[0].clientY, {passive: true});
+                document.addEventListener('touchend', e => { 
+                    const d = ty - e.changedTouches[0].clientY; 
+                    if (Math.abs(d) > 50) d > 0 ? this.next() : this.prev(); 
+                }, {passive: true});
+
+                const b = document.createElement('div'); 
+                b.className = 'progress-bar'; 
+                document.body.appendChild(b); 
+                this.progressBar = b; 
+                this.updateProgress();
+
+                const slideObserver = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.current = Array.from(this.slides).indexOf(entry.target);
+                            this.updateProgress();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                this.slides.forEach(slide => slideObserver.observe(slide));
+
+                // Set initial active slide
+                this.slides[0].scrollIntoView({ behavior: 'auto' });
+            }
+            next() { this.goTo(Math.min(this.current + 1, this.slides.length - 1)); }
+            prev() { this.goTo(Math.max(this.current - 1, 0)); }
+            goTo(i) { 
+                this.slides[i].scrollIntoView({ behavior: 'smooth' }); 
+            }
+            updateProgress() { 
+                this.progressBar.style.width = ((this.current + 1) / this.slides.length * 100) + '%'; 
+            }
+        }
+        
+        // Wait for fonts/styles to render
+        window.addEventListener('load', () => {
+            new SlideMaestro();
+
+            // Initialize Chart
+            const style = getComputedStyle(document.body);
+            const accent = style.getPropertyValue('--accent').trim();
+            const accentAlt = style.getPropertyValue('--accent-alt').trim();
+            const surface = style.getPropertyValue('--surface').trim();
+            const ink = style.getPropertyValue('--ink').trim();
+            const fontDisplay = style.getPropertyValue('--font-display').trim();
+
+            new Chart(document.getElementById('budgetChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sponsors (775K)', 'IMSciences (457K)'],
+                    datasets: [{
+                        data: [775000, 457000],
+                        backgroundColor: [accentAlt, accent],
+                        borderWidth: 4,
+                        borderColor: surface,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: ink,
+                                font: { family: fontDisplay, size: 14 }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
